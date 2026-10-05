@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+.DS_Store
+
+data/raw/*
+data/processed/*
+results/checkpoints/*
+!.gitkeep
+.ipynb_checkpoints/
+devs.sh
+data_dev.txt
+devs.sh/
+data_dev.txt/
