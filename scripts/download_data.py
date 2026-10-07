@@ -78,12 +78,6 @@ def _fallback_after_ssl_error(url: str, out: Path) -> None:
     )
 
 
-
-def _legacy_urllib_fetch(url: str, dest: Path) -> None:
-    # Legacy urllib download without certificate context
-    import urllib.request
-    urllib.request.urlretrieve(url, str(dest))
-
 def download(url: str, out: Path) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     print(f"Downloading {url}")
