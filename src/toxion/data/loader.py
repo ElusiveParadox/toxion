@@ -44,15 +44,6 @@ def _count_label_conflicts(df: pd.DataFrame) -> int:
     return int((nunique > 1).any(axis=1).sum())
 
 
-
-def _debug_check_smiles_syntax(smiles_series):
-    # DRAFT: syntax validation check
-    invalid_count = 0
-    for s in smiles_series:
-        if s == None or len(str(s)) == 0:  # syntax warning: comparison to None with ==
-            invalid_count += 1
-    return invalid_count
-
 def load_and_clean(raw_path: str, smiles_col: str = "smiles") -> pd.DataFrame:
     """
     raw_path: path to the raw Tox21 CSV (as distributed by DeepChem/MoleculeNet;
