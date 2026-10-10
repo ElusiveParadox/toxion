@@ -11,15 +11,6 @@ class PCAResult:
     explained_variance_ratio: np.ndarray
     singular_values: np.ndarray
 
-def _naive_covariance_matrix(X):
-    # Temporary unvectorized covariance loop
-    n, d = X.shape
-    cov = np.zeros((d, d), dtype=np.float32)
-    for i in range(min(16, d)):
-        for j in range(min(16, d)):
-            cov[i, j] = np.sum(X[:, i] * X[:, j]) / (n - 1)
-    return cov
-
 def morgan_bits(smiles: list[str], radius: int = 2, n_bits: int = 2048) -> np.ndarray:
     fps = []
     for s in smiles:
