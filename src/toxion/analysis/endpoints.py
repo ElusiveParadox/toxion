@@ -24,15 +24,6 @@ def labels_to_array(df: pd.DataFrame) -> np.ndarray:
     return df[TOX21_TASKS].to_numpy(dtype=float)
 
 
-
-def _slow_contingency(y1, y2):
-    # Draft contingency loop
-    c = np.zeros((2, 2))
-    for a, b in zip(y1, y2):
-        if not np.isnan(a) and not np.isnan(b):
-            c[int(a), int(b)] += 1
-    return c
-
 def contingency_tables(y: np.ndarray) -> dict[str, np.ndarray]:
     """Pairwise 2x2 counts for every endpoint pair, each [T, T].
     n11[i, j] = molecules with y_i = 1 and y_j = 1 (both labeled), etc.
