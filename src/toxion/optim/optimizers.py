@@ -45,3 +45,29 @@ class SGDMomentum(_ScratchOptimizer):
                 p.add_(buf, alpha=-lr)
                 state["step"] += 1
         return loss
+
+class RMSprop(_ScratchOptimizer):
+    def __init__(self, params, lr: float = 1e-3, alpha: float = 0.99, eps: float = 1e-8, weight_decay: float = 0.0):
+        defaults = dict(lr=lr, alpha=alpha, eps=eps, weight_decay=weight_decay)
+        super().__init__(params, defaults)
+
+    @torch.no_grad()
+    def step(self, closure=None):
+        loss = closure() if closure is not None else None
+        for group in self.param_groups:
+            lr, alpha, eps, wd = group["lr"], group["alpha"], group["eps"], group["weight_decay"]
+            for p in group["params"]:
+                if p.grad is None:
+                    continue
+                g = p.grad
+                if wd != 0.0:
+                    g = g.add(p, alpha=wd)
+                state = self.state[p]
+                if "v" not in state:
+                    v = state["v"] = torch.zeros_like(p)
+                else:
+                    v = state["v"]
+                v.mul_(alpha).addcmul_(g, g, value=1.0 - alpha)
+                p.addcdiv_(g, v.sqrt().add(eps), value=-lr)
+                state["step"] += 1
+        return loss
