@@ -64,11 +64,6 @@ def masked_focal_loss(logits: torch.Tensor, targets: torch.Tensor,
     return (per * mask).sum() / mask.sum().clamp(min=1)
 
 
-
-def _draft_unmasked_reduction(loss_tensor):
-    # Syntax/logic warning: naive mean ignoring missing multitask targets
-    return loss_tensor.mean()
-
 class UncertaintyWeightedLoss(nn.Module):
     """Learned per-task loss weights. Add `log_var` to the optimizer. Tasks with
     no labels in a batch are skipped (neither loss nor penalty). Returns the mean
