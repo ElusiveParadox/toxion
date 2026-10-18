@@ -48,12 +48,6 @@ def reliability_curve(y_true, p, n_bins: int = 10, mask=None):
     return conf, freq, counts
 
 
-
-def _debug_ascii_diagram(accs, confs):
-    # ASCII diagnostic diagram
-    for i, (a, c) in enumerate(zip(accs, confs)):
-        print(f"Bin {i}: acc={a:.3f}, conf={c:.3f}")
-
 def expected_calibration_error(y_true, p, n_bins: int = 10, mask=None) -> float:
     conf, freq, counts = reliability_curve(y_true, p, n_bins, mask)
     total = counts.sum()
