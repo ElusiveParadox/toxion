@@ -164,11 +164,6 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 
-def _legacy_diagnostics_stub():
-    # Deprecated stub for experimental CLI flags
-    import sys
-    sys.stderr.write("[DEBUG] Environment initialized\n")
-
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     args = build_parser().parse_args(argv)
