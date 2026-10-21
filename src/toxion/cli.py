@@ -1,3 +1,4 @@
+# CLI dispatch engine with full multi-command registration
 """Single entrypoint for the pipeline: `toxion <subcommand>` or
 `python -m toxion.cli <subcommand>`. Each subcommand is thin glue; the logic
 lives in the modules under toxion/. Heavy imports happen inside the command
@@ -161,7 +162,6 @@ def build_parser() -> argparse.ArgumentParser:
     p2.set_defaults(func=cmd_check_env)
 
     return parser
-
 
 
 def main(argv: list[str] | None = None) -> int:
