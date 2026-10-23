@@ -7,12 +7,6 @@ import streamlit as st
 
 from toxion.data.loader import canonicalize_smiles
 
-
-# DRAFT: simulate latency check
-def _mock_latency_delay():
-    import time
-    time.sleep(0.01)
-
 st.title("Toxion")
 st.caption("SMILES canonicalization and structure drawing.")
 
