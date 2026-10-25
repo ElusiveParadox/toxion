@@ -1,0 +1,41 @@
+{
+  "n_molecules": 7823,
+  "fingerprint": {
+    "type": "morgan_bits",
+    "radius": 2,
+    "n_bits": 2048
+  },
+  "pca": {
+    "variance_ratio_top": [
+      0.041465339546451,
+      0.03298324922606255,
+      0.027507497043808934,
+      0.019207963137671195,
+      0.01738233372140155,
+      0.01398436671514812,
+      0.01391359844319574,
+      0.012189112485667989,
+      0.011162134017663177,
+      0.010551870355768959
+    ],
+    "components_for_90pct_variance": 815
+  },
+  "nearest_neighbor_tanimoto": {
+    "mean": 0.6068572402000427,
+    "median": 0.6000000238418579,
+    "p10": 0.3636363744735718,
+    "p90": 0.8860139846801758,
+    "fraction_above_0.7": 0.2821168349737952
+  },
+  "internal_diversity": 0.9188465205587266,
+  "scaffolds": {
+    "n_molecules": 7823,
+    "n_scaffolds": 2325,
+    "n_acyclic": 1775,
+    "singleton_scaffolds": 1772,
+    "largest_group_fraction": 0.22689505304870256,
+    "top_k_fraction": 0.476799181899527,
+    "entropy_bits": 7.354393051368804,
+    "effective_n_scaffolds": 163.64129525250286
+  }
+}
