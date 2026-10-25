@@ -572,7 +572,7 @@ def cmd_train(args):
     table = pd.DataFrame({name: final[name] for name in ("train", "val", "test", "all")})
     print("\nMetrics (mean over endpoints; 'all' = train+val+test pooled, includes training data):")
     print(table.loc[METRIC_NAMES].round(4).to_string())
-    counts = table.loc[["n_labeled", "positive_rate"]]
+    counts = table.loc[["n_labeled", "positive_rate"]].astype(object)
     counts.loc["n_labeled"] = counts.loc["n_labeled"].astype(int).astype(str)
     counts.loc["positive_rate"] = counts.loc["positive_rate"].map(lambda v: f"{v:.4f}")
     print("\nLabeled entries and positive rate:")
