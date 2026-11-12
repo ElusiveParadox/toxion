@@ -1,14 +1,3 @@
-"""Learning-rate schedules as multiplicative factors f(step) applied to the
-base learning rate: lr_t = lr_base * f(t), with t = 0, 1, 2, ... counting
-optimizer steps already taken.
-
-warmup + cosine:
-    t < W:   f = (t + 1) / W                               (linear warmup)
-    t >= W:  f = f_min + (1 - f_min) * 0.5 * (1 + cos(pi * p)),
-             p = min(1, (t - W) / max(1, T - W))            (cosine decay to f_min)
-step decay:
-    f = gamma ** floor(t / step_size)
-"""
 
 from __future__ import annotations
 
@@ -28,8 +17,6 @@ def step_decay_factor(step: int, step_size: int, gamma: float = 0.1) -> float:
 
 
 def make_scheduler(optimizer, factor_fn):
-    """Wrap a factor function f(step) in torch's LambdaLR. Call
-    scheduler.step() once per optimizer step."""
     from torch.optim.lr_scheduler import LambdaLR
 
     return LambdaLR(optimizer, lr_lambda=factor_fn)

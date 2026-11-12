@@ -1,6 +1,3 @@
-"""Label statistics for the cleaned Tox21 table: per-endpoint class balance
-and overall missingness. Used by `toxion summary` and the data-check notebook.
-"""
 
 from __future__ import annotations
 
@@ -13,9 +10,6 @@ if TYPE_CHECKING:
 
 
 def summarize_labels(df: pd.DataFrame) -> pd.DataFrame:
-    """One row per endpoint: labeled / missing counts, positives, negatives,
-    positive_rate (positives / labeled). NaN labels are 'not tested' and are
-    never counted as negatives."""
     import pandas as pd
 
     n = len(df)

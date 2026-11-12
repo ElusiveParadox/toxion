@@ -1,11 +1,3 @@
-"""Load raw Tox21 data, canonicalize SMILES, deduplicate, keep missing
-labels as NaN (never zero-filled: zero would mean 'tested inactive', NaN
-means 'not tested', and the masked loss/metrics downstream depend on that
-distinction being preserved).
-
-pandas and RDKit are imported inside the functions that use them, so
-importing this module (and running `toxion --help`) stays cheap.
-"""
 
 from __future__ import annotations
 
@@ -25,8 +17,6 @@ TOX21_TASKS = [
 
 
 def canonicalize_smiles(smiles: str) -> str | None:
-    """Return RDKit canonical SMILES, or None if the input doesn't parse
-    (including non-string input such as a NaN cell)."""
     from rdkit import Chem
 
     if not isinstance(smiles, str):
@@ -38,20 +28,11 @@ def canonicalize_smiles(smiles: str) -> str | None:
 
 
 def _count_label_conflicts(df: pd.DataFrame) -> int:
-    """Number of canonical SMILES that appear more than once with
-    disagreeing non-missing labels on at least one task."""
     nunique = df.groupby("smiles_canonical")[TOX21_TASKS].nunique(dropna=True)
     return int((nunique > 1).any(axis=1).sum())
 
 
 def load_and_clean(raw_path: str, smiles_col: str = "smiles") -> pd.DataFrame:
-    """
-    raw_path: path to the raw Tox21 CSV (as distributed by DeepChem/MoleculeNet;
-    .csv.gz is read directly).
-    Returns a DataFrame with columns: smiles_canonical + TOX21_TASKS (floats,
-    NaN for missing labels), deduplicated on canonical SMILES (first
-    occurrence kept).
-    """
     import pandas as pd
 
     df = pd.read_csv(raw_path)

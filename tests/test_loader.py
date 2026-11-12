@@ -15,7 +15,6 @@ from toxion.data.loader import (
 
 
 def _write_raw(path, rows):
-    """rows: list of (smiles, {task: value}); unspecified tasks are NaN."""
     records = []
     for i, (smiles, labels) in enumerate(rows):
         record = {task: labels.get(task, np.nan) for task in TOX21_TASKS}

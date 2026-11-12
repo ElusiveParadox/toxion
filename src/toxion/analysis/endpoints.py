@@ -1,11 +1,3 @@
-"""Dependence between Tox21 endpoints, computed on pairwise-complete data
-(for a pair of endpoints, only molecules labeled for both are used).
-
-phi coefficient (Pearson correlation of two binary variables):
-    phi = (n11*n00 - n10*n01) / sqrt((n11+n10)(n01+n00)(n11+n01)(n10+n00))
-mutual information (bits):
-    I(A;B) = sum_ab p(a,b) * log2( p(a,b) / (p(a) p(b)) ),  0*log 0 = 0
-"""
 
 from __future__ import annotations
 
@@ -20,14 +12,10 @@ if TYPE_CHECKING:
 
 
 def labels_to_array(df: pd.DataFrame) -> np.ndarray:
-    """[n_molecules, n_tasks] float array, NaN where not tested."""
     return df[TOX21_TASKS].to_numpy(dtype=float)
 
 
 def contingency_tables(y: np.ndarray) -> dict[str, np.ndarray]:
-    """Pairwise 2x2 counts for every endpoint pair, each [T, T].
-    n11[i, j] = molecules with y_i = 1 and y_j = 1 (both labeled), etc.
-    n_both[i, j] = molecules labeled for both i and j."""
     mask = ~np.isnan(y)
     m = mask.astype(np.float64)
     ym = np.where(mask, y, 0.0)
@@ -53,8 +41,6 @@ def phi_matrix(y: np.ndarray) -> np.ndarray:
 
 
 def mutual_information_matrix(y: np.ndarray) -> np.ndarray:
-    """Plug-in mutual information in bits. The diagonal is the entropy of
-    each endpoint. Biased upward for small pairwise samples."""
     t = contingency_tables(y)
     n = t["n_both"]
     cells = np.stack([t["n00"], t["n01"], t["n10"], t["n11"]])
@@ -70,7 +56,6 @@ def mutual_information_matrix(y: np.ndarray) -> np.ndarray:
 
 
 def endpoint_dependence(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
-    """phi, mutual information (bits) and co-labeled counts as labeled DataFrames."""
     import pandas as pd
 
     y = labels_to_array(df)

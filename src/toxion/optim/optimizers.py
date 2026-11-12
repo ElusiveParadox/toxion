@@ -1,32 +1,3 @@
-"""First-order optimizers written from the update equations, as
-torch.optim.Optimizer subclasses. Conventions match torch.optim (default
-hyperparameters, where eps is added, how weight decay enters) so each class
-can be checked numerically against its torch counterpart.
-
-Notation: theta = parameter, g = gradient, lr = learning rate, t = step count.
-
-SGD (momentum mu, optional Nesterov, L2 weight decay lambda):
-    g <- g + lambda * theta
-    buf <- g                          (t = 1)
-    buf <- mu * buf + g               (t > 1)
-    d <- g + mu * buf if nesterov else buf
-    theta <- theta - lr * d
-
-RMSprop (decay alpha):
-    g <- g + lambda * theta
-    v <- alpha * v + (1 - alpha) * g^2
-    theta <- theta - lr * g / (sqrt(v) + eps)
-
-Adam (beta1, beta2):
-    g <- g + lambda * theta                       (L2, coupled)
-    m <- beta1 * m + (1 - beta1) * g
-    v <- beta2 * v + (1 - beta2) * g^2
-    m_hat = m / (1 - beta1^t),  v_hat = v / (1 - beta2^t)
-    theta <- theta - lr * m_hat / (sqrt(v_hat) + eps)
-
-AdamW: same, but weight decay is decoupled from the gradient:
-    theta <- theta * (1 - lr * lambda)            (before the Adam step)
-"""
 
 from __future__ import annotations
 

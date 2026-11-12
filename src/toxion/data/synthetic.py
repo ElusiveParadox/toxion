@@ -1,9 +1,3 @@
-"""Synthetic Tox21-shaped data for testing the pipeline before (or without)
-the real dataset. Molecules are random substituted rings; labels are drawn from
-a made-up rule with a shared latent factor so endpoints are correlated.
-
-NEVER report anything computed from this data as a result.
-"""
 
 from __future__ import annotations
 
@@ -34,8 +28,6 @@ def _branch(s: str) -> str:
 
 
 def make_synthetic_clean(n: int = 400, seed: int = 0) -> pd.DataFrame:
-    """DataFrame with smiles_canonical + the 12 Tox21 columns (NaN = missing),
-    n unique molecules (fewer if the generator runs out of distinct ones)."""
     import pandas as pd
     from rdkit import Chem
 
@@ -77,8 +69,6 @@ def make_synthetic_clean(n: int = 400, seed: int = 0) -> pd.DataFrame:
 
 
 def make_synthetic_raw(n: int = 400, seed: int = 0) -> pd.DataFrame:
-    """Same data in the raw Tox21 CSV layout (12 task columns + mol_id + smiles),
-    readable by `toxion prepare-data`."""
     df = make_synthetic_clean(n, seed)
     raw = df[TOX21_TASKS].copy()
     raw["mol_id"] = [f"SYN{i:05d}" for i in range(len(df))]

@@ -1,13 +1,3 @@
-"""Download the Tox21 CSV (DeepChem/MoleculeNet distribution) into data/raw/.
-
-Usage: python scripts/download_data.py [--url URL] [--out data/raw/tox21.csv.gz]
-Standard library only, so it runs before the project is installed.
-
-If Python's TLS certificate check fails (common with the python.org macOS
-installer before 'Install Certificates.command' has been run), it retries with
-the certifi bundle if available, then with curl, which uses the system
-certificates.
-"""
 
 import argparse
 import shutil

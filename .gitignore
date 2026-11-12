@@ -10,8 +10,8 @@ data/raw/*
 data/processed/*
 results/checkpoints/*
 !.gitkeep
-.ipynb_checkpoints/
+
+.env
+*.state
+*.tmp
 devs.sh
-data_dev.txt
-devs.sh/
-data_dev.txt/

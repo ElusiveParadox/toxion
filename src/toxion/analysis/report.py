@@ -1,5 +1,3 @@
-"""Run the advanced EDA on a cleaned table and write results to a folder:
-CSV tables plus a JSON summary. Plots live in the notebook, not here."""
 
 from __future__ import annotations
 

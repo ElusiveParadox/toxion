@@ -1,17 +1,3 @@
-"""Calibration of binary probabilities (NumPy + SciPy only).
-
-Expected calibration error, equal-width bins b over [0, 1] on the
-positive-class probability p:
-    ECE = sum_b (n_b / N) * | mean(y in b) - mean(p in b) |
-Brier score = mean (p - y)^2.
-
-Temperature scaling (Guo et al. 2017): p = sigmoid(z / T), T > 0 fit on a
-validation set by minimizing the negative log-likelihood
-    NLL(beta) = sum_i [ softplus(beta z_i) - y_i beta z_i ],  beta = 1 / T.
-NLL is convex in beta (it is a logistic loss in the single feature z), so the
-minimum is unique. Dividing logits by a positive constant does not change their
-order, so ROC-AUC and PR-AUC are unchanged; only probability values move.
-"""
 
 from __future__ import annotations
 
@@ -31,8 +17,6 @@ def _select(y_true, p, mask):
 
 
 def reliability_curve(y_true, p, n_bins: int = 10, mask=None):
-    """Returns (mean_confidence, observed_frequency, counts), each [n_bins];
-    empty bins have NaN confidence/frequency and count 0."""
     y, p = _select(y_true, p, mask)
     edges = np.linspace(0.0, 1.0, n_bins + 1)
     bin_id = np.clip(np.digitize(p, edges[1:-1], right=False), 0, n_bins - 1)
@@ -69,9 +53,6 @@ def negative_log_likelihood(y_true, logits, temperature: float = 1.0, mask=None)
 
 
 def fit_temperature(logits, y_true, mask=None, bounds: tuple[float, float] = (-6.0, 6.0)) -> float:
-    """Single temperature T minimizing validation NLL. Searches u = log(beta)
-    in `bounds` (so T in roughly [0.0025, 403]). Returns 1.0 if only one class
-    is present."""
     from scipy.optimize import minimize_scalar
 
     y, z = _select(y_true, logits, mask)
@@ -87,7 +68,6 @@ def fit_temperature(logits, y_true, mask=None, bounds: tuple[float, float] = (-6
 
 
 def fit_temperature_per_task(logits: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-    """[n, T] logits and labels (NaN = missing) -> [T] temperatures."""
     return np.array([fit_temperature(logits[:, t], y_true[:, t]) for t in range(logits.shape[1])])
 
 

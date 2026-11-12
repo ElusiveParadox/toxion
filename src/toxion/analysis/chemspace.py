@@ -1,13 +1,3 @@
-"""Chemical-space analysis of the cleaned molecules.
-
-PCA via SVD of the centered fingerprint matrix Xc = U S V^T:
-    explained variance of component k = S_k^2 / (n - 1)
-    scores = Xc V_k = U_k S_k
-Tanimoto similarity of binary fingerprints a, b:
-    T(a, b) = |a & b| / (|a| + |b| - |a & b|)
-Scaffold diversity: Shannon entropy H = -sum_s p_s log2 p_s over Bemis-Murcko
-scaffold frequencies, and the effective number of scaffolds 2**H.
-"""
 
 from __future__ import annotations
 
@@ -18,7 +8,6 @@ import numpy as np
 
 
 def morgan_bits(smiles: list[str], radius: int = 2, n_bits: int = 2048) -> np.ndarray:
-    """[n, n_bits] uint8 Morgan bit fingerprints."""
     from rdkit import Chem
     from rdkit.Chem import rdFingerprintGenerator
 
@@ -69,8 +58,6 @@ def pca_svd(X: np.ndarray, n_components: int = 2) -> PCAResult:
 
 
 def tanimoto_matrix(A: np.ndarray, B: np.ndarray | None = None) -> np.ndarray:
-    """Pairwise Tanimoto similarity between rows of binary matrices.
-    Two all-zero fingerprints get similarity 0."""
     A = np.asarray(A, dtype=np.float32)
     B = A if B is None else np.asarray(B, dtype=np.float32)
     inter = A @ B.T
@@ -80,8 +67,6 @@ def tanimoto_matrix(A: np.ndarray, B: np.ndarray | None = None) -> np.ndarray:
 
 
 def nearest_neighbor_similarity(A: np.ndarray, chunk: int = 1024) -> tuple[np.ndarray, np.ndarray]:
-    """For each row, the highest Tanimoto similarity to any *other* row and
-    that row's index. Chunked so memory stays O(chunk * n)."""
     n = A.shape[0]
     if n < 2:
         raise ValueError("need at least 2 molecules")
@@ -97,8 +82,6 @@ def nearest_neighbor_similarity(A: np.ndarray, chunk: int = 1024) -> tuple[np.nd
 
 
 def internal_diversity(A: np.ndarray, max_molecules: int = 2000, seed: int = 0) -> float:
-    """Mean pairwise (1 - Tanimoto) over distinct pairs, on a random subsample
-    of at most max_molecules rows."""
     n = A.shape[0]
     if n > max_molecules:
         rows = np.random.default_rng(seed).choice(n, size=max_molecules, replace=False)
@@ -111,9 +94,6 @@ def internal_diversity(A: np.ndarray, max_molecules: int = 2000, seed: int = 0) 
 
 
 def scaffold_stats(smiles: list[str], top_k: int = 10) -> dict:
-    """Bemis-Murcko scaffold distribution. The empty scaffold '' is acyclic
-    molecules. Matters for scaffold splitting: a very large group lands whole
-    in one split."""
     from rdkit import Chem
     from rdkit.Chem.Scaffolds import MurckoScaffold
 
